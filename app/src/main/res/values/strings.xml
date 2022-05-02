@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">NAvigationDrawerApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="profile">View profile</string>
+    <string name="kidDetail">Kid\'s details</string>
+    <string name="advice">Advices</string>
+    <string name="health_tips">Health tips</string>
+    <string name="appointment">Appointments</string>
+    <string name="medication">Medications</string>
+    <string name="chat">Chat</string>
+    <string name="closeDrawer">Close_drawer</string>
+    <string name="openDrawer">Open_drwawer</string>
+    <string-array name="nav_item_activties_titles">
+        <item>@string/menu_home</item>
+        <item>@string/profile</item>
+        <item>@string/kidDetail</item>
+        <item>@string/advice</item>
+        <item>@string/health_tips</item>
+        <item>@string/appointment</item>
+        <item>@string/medication</item>
+    </string-array>
+    <string name="title_activity_getnavs_home_page">GetnavsHomePage</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

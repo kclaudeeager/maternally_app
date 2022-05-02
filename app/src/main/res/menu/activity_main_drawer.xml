@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/user"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/kids"
+            android:icon="@drawable/child_icon"
+            android:title="@string/kidDetail" />
+        <item
+            android:id="@+id/advice"
+            android:icon="@drawable/advice"
+            android:title="@string/advice" />
+        <item
+            android:id="@+id/tips"
+            android:icon="@drawable/tips"
+            android:title="@string/health_tips" />
+        <item
+            android:id="@+id/appointment"
+            android:icon="@drawable/meet"
+            android:title="@string/appointment" />
+        <item
+            android:id="@+id/medication"
+            android:icon="@drawable/medications"
+            android:title="@string/medication" />
+        <item
+            android:id="@+id/chat"
+            android:icon="@drawable/chat"
+            android:title="@string/chat" />
+    </group>
+</menu>
