@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(String phone,String password){
         progressBar.setVisibility(View.VISIBLE);
         String realPhone="0789728209";
-        String pass="123qwe";
+        String pass="123";
         if(realPhone.equals(phone)&& pass.equals(password)){
             Intent mainActivityIntent=new Intent(LoginActivity.this,MainActivity.class);
             mainActivityIntent.putExtra("phone",phone);
