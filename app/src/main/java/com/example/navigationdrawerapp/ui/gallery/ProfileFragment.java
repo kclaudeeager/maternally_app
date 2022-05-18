@@ -1,5 +1,7 @@
 package com.example.navigationdrawerapp.ui.gallery;
 
+import static com.example.navigationdrawerapp.MainActivity.userDataJs;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +31,25 @@ public class ProfileFragment extends Fragment {
                 new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        String phoneNum = null;
+        String email = null;
+        String firstName;
+        String lastName;
+        String role;
+        String fullName = null;
+        try {
+            phoneNum=userDataJs.getString("phone");
+            email=userDataJs.getString("email");
+            firstName=userDataJs.getString("firstName");
+            lastName=userDataJs.getString("lastName");
+            role=userDataJs.getString("role");
+            fullName=firstName+"  "+lastName;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        binding.email.setText(email);
+        binding.fullName.setText(fullName);
+        binding.phone.setText(phoneNum);
         View root = binding.getRoot();
 
 

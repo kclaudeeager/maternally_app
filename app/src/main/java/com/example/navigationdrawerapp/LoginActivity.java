@@ -119,10 +119,10 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(LoginActivity.this, " Well Logedin",Toast.LENGTH_LONG).show();
                                             UserInfo = toMap(response);
                                             token = UserInfo.get("token").toString();
-//                                            Log.i("User details:", UserInfo.get("User").toString());
-//                                            JSONObject userJson = new JSONObject(response.get("User").toString());
-//                                            Log.i("userJson:", userJson.toString());
-                                            // Object user=(UserInfo.get("User")).getClass();
+                                           Log.i("User details:", UserInfo.get("User").toString());
+                                            JSONObject userJson = new JSONObject(response.get("User").toString());
+                                            Log.i("userJson:", userJson.toString());
+                                             Object user=(UserInfo.get("User")).getClass();
                                             Log.d("token: ", token);
                                             usernametxt.setText("");
                                             passwordtxt.setText("");
@@ -133,7 +133,8 @@ public class LoginActivity extends AppCompatActivity {
 //                                                case "MOTHER": {
                                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                     intent.putExtra("token", token);
-
+                                                    intent.putExtra("User",response.get("User").toString());
+                                                     intent.putExtra("phone",password);
                                                     startActivity(intent);
 //                                                }
 //                                                break;

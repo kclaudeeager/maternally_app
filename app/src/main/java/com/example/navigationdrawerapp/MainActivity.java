@@ -111,10 +111,11 @@ public class MainActivity extends AppCompatActivity {
         Intent userInfoINtent=getIntent();
         token=userInfoINtent.getStringExtra("token");
         System.out.println("token : "+token);
-        System.out.println(new StringBuilder().append("USer info: ").append(getDecodedJwt(MainActivity.token)).toString());
-        String userData=getDecodedJwt(token);
+       String userData=userInfoINtent.getStringExtra("User");
+       String phone=userInfoINtent.getStringExtra("phone");
         try {
              userDataJs=new JSONObject(userData);
+             userDataJs.put("phone",phone);
             System.out.println("Json user data:"+userDataJs);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -124,34 +125,6 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(activityTitles[navItemIndex]);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public String getDecodedJwt(String jwt)
-    {
-        String result = "";
-
-        String[] parts = jwt.split("[.]");
-        try
-        {
-            int index = 0;
-            for(String part: parts)
-            {
-                if (index >= 2)
-                    break;
-
-                index++;
-                byte[] partAsBytes = part.getBytes("UTF-8");
-                String decodedPart = new String(getUrlDecoder().decode(partAsBytes), "UTF-8");
-
-                result += decodedPart;
-            }
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException("Couldnt decode jwt", e);
-        }
-
-        return result;
-    }
     private Fragment getHomeFragment() {
         System.out.println("INdex "+navItemIndex);
         switch (navItemIndex) {
