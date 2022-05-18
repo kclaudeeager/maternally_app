@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Janvier/AndroidStudioProjects/MaternallyHealthApp/app/src/main/res/drawable/bg_circle.xml" value="0.1" />
+        <entry key="..\:/Users/Janvier/AndroidStudioProjects/MaternallyHealthApp/app/src/main/res/drawable/img.xml" value="0.1" />
+        <entry key="..\:/Users/Janvier/AndroidStudioProjects/MaternallyHealthApp/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/Janvier/AndroidStudioProjects/MaternallyHealthApp/app/src/main/res/layout/content_main.xml" value="0.1" />
+        <entry key="..\:/Users/Janvier/AndroidStudioProjects/MaternallyHealthApp/app/src/main/res/layout/fragment_gallery.xml" value="0.1574074074074074" />
         <entry key="..\:/Users/Janvier/AndroidStudioProjects/NAvigationDrawerApp/app/src/main/res/drawable/bg_circle.xml" value="0.1" />
         <entry key="..\:/Users/Janvier/AndroidStudioProjects/NAvigationDrawerApp/app/src/main/res/layout/activity_getnavs_home_page.xml" value="0.1" />
         <entry key="..\:/Users/Janvier/AndroidStudioProjects/NAvigationDrawerApp/app/src/main/res/layout/activity_login.xml" value="0.25" />

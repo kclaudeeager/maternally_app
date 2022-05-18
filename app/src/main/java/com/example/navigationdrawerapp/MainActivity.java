@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_CHAT = "Chat";
     public static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
+    public static String token;
    ImageView imageViewProfile;
     String phoneNumber;
     private Handler mHandler;
@@ -98,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
       CURRENT_TAG=TAG_HOME;
       loadHomeFragment();
   }
+        Intent userInfoINtent=getIntent();
+        token=userInfoINtent.getStringExtra("token");
+        System.out.println("token : "+token);
     }
     private void setToolbarTitle() {
         Objects.requireNonNull(getSupportActionBar()).setTitle(activityTitles[navItemIndex]);
