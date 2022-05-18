@@ -84,11 +84,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     synchronized private void Login(String email,String password){
-//        final ProgressDialog progressDialog = new ProgressDialog(this);
-//        progressDialog.setCancelable(true);
-//        progressDialog.setMessage("Please wait for loading....");
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.show();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(true);
+        progressDialog.setMessage("Please wait for loading....");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
         new Thread() {
             public void run() {
@@ -155,6 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                                             passwordtxt.setText("");
                                             progressBar.setVisibility(View.GONE);
                                         }
+                                        progressDialog.dismiss();
                                         progressBar.setVisibility(View.GONE);
 
                                     } catch (JSONException e) {
@@ -171,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                             usernametxt.setText("");
                             passwordtxt.setText("");
                             progressBar.setVisibility(View.GONE);
+                            progressDialog.dismiss();
                         }
                     }) {
 

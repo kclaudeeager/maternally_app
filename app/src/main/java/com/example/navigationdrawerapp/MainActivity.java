@@ -1,7 +1,10 @@
 package com.example.navigationdrawerapp;
 
+import static java.util.Base64.getUrlDecoder;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -25,6 +29,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.navigationdrawerapp.databinding.ActivityMainBinding;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -58,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
    ImageView imageViewProfile;
     String phoneNumber;
     private Handler mHandler;
+    public static  JSONObject userDataJs;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,11 +111,47 @@ public class MainActivity extends AppCompatActivity {
         Intent userInfoINtent=getIntent();
         token=userInfoINtent.getStringExtra("token");
         System.out.println("token : "+token);
+        System.out.println(new StringBuilder().append("USer info: ").append(getDecodedJwt(MainActivity.token)).toString());
+        String userData=getDecodedJwt(token);
+        try {
+             userDataJs=new JSONObject(userData);
+            System.out.println("Json user data:"+userDataJs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     private void setToolbarTitle() {
         Objects.requireNonNull(getSupportActionBar()).setTitle(activityTitles[navItemIndex]);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String getDecodedJwt(String jwt)
+    {
+        String result = "";
+
+        String[] parts = jwt.split("[.]");
+        try
+        {
+            int index = 0;
+            for(String part: parts)
+            {
+                if (index >= 2)
+                    break;
+
+                index++;
+                byte[] partAsBytes = part.getBytes("UTF-8");
+                String decodedPart = new String(getUrlDecoder().decode(partAsBytes), "UTF-8");
+
+                result += decodedPart;
+            }
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("Couldnt decode jwt", e);
+        }
+
+        return result;
+    }
     private Fragment getHomeFragment() {
         System.out.println("INdex "+navItemIndex);
         switch (navItemIndex) {

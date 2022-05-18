@@ -15,6 +15,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.navigationdrawerapp.MainActivity;
 import com.example.navigationdrawerapp.databinding.FragmentGalleryBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ProfileFragment extends Fragment {
 
     private FragmentGalleryBinding binding;
@@ -27,7 +30,8 @@ public class ProfileFragment extends Fragment {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        System.out.println(new StringBuilder().append("USer info: ").append(getDecodedJwt(MainActivity.token)).toString());
+
+
 //        final TextView textView = binding.profile;
 //        profileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
@@ -38,32 +42,6 @@ public class ProfileFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public String getDecodedJwt(String jwt)
-    {
-        String result = "";
 
-        String[] parts = jwt.split("[.]");
-        try
-        {
-            int index = 0;
-            for(String part: parts)
-            {
-                if (index >= 2)
-                    break;
 
-                index++;
-                byte[] partAsBytes = part.getBytes("UTF-8");
-                String decodedPart = new String(java.util.Base64.getUrlDecoder().decode(partAsBytes), "UTF-8");
-
-                result += decodedPart;
-            }
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException("Couldnt decode jwt", e);
-        }
-
-        return result;
-    }
 }
