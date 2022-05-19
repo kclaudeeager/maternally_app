@@ -2,13 +2,20 @@ package com.example.navigationdrawerapp.ui.kids;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.navigationdrawerapp.R;
+import com.example.navigationdrawerapp.databinding.FragmentGalleryBinding;
+import com.example.navigationdrawerapp.databinding.FragmentKidsDetailsFragmentBinding;
+
+import java.util.zip.Inflater;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +32,8 @@ public class Kids_details_fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private FragmentKidsDetailsFragmentBinding binding;
+    LinearLayoutCompat linearLayoutCompat;
     public Kids_details_fragment() {
         // Required empty public constructor
     }
@@ -61,6 +69,24 @@ public class Kids_details_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_kids_details_fragment, container, false);
+        binding = FragmentKidsDetailsFragmentBinding.inflate(inflater, container, false);
+        View root=binding.getRoot();
+        linearLayoutCompat=binding.kidLinearLayout;
+        LayoutInflater kidsDetailInflater=LayoutInflater.from(getContext());
+       linearLayoutCompat.setGravity(Gravity.CENTER);
+
+       int i=0;
+       while (i<5) {
+           View kidsDetailsView= kidsDetailInflater.inflate(R.layout.kids_details, container,false);
+           TextView firstnameView=kidsDetailsView.findViewById(R.id.first_name);
+           TextView lastnameView=kidsDetailsView.findViewById(R.id.lastname);
+           TextView dateOfBirthView=kidsDetailsView.findViewById(R.id.birthDate);
+           firstnameView.setText("First name "+(i+1));
+           lastnameView.setText("Last name "+(i+1));
+           dateOfBirthView.setText("Date of birth "+(i+1));
+           linearLayoutCompat.addView(kidsDetailsView);
+           i++;
+       }
+        return root;
     }
 }
