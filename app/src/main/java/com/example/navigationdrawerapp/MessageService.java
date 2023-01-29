@@ -12,19 +12,26 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class MessageService extends Service {
-    private static final String TAG = "MessageService";
+    private static final String TAG = MessageService.class.getSimpleName();
+    private static final String MESSAGE_SENT_ACTION = "com.example.MESSAGE_SENT_ACTION";
+    private static final String NEW_MESSAGE_ACTION = "com.example.NEW_MESSAGE_ACTION";
+
     Context context;
     String token;
+
 
     public MessageService() {
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i("iBind intent",intent.toString());
         return null;
     }
 
@@ -57,9 +64,14 @@ public class MessageService extends Service {
                 response -> {
                     // Handle the response from the server
                     // Parse the JSON response and update the UI with the new messages
+                    Log.d("Incoming",response);
+                    Intent intent = new Intent("new_message");
+                    intent.putExtra("message", response);
+                    context.sendBroadcast(intent);
                 },
                 error -> {
                     // Handle any error that occurs while listening for new messages
+                    Log.e("error", String.valueOf(error));
                 }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -83,9 +95,11 @@ public class MessageService extends Service {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Urls.PARENT_URL + "messages/add",
                 response -> {
                     // Handle the response from the server
+                    Log.i("Sent..",response);
                 },
                 error -> {
                     // Handle any error that occurs while sending the message
+                    Log.e("SendingError", String.valueOf(error));
                 }) {
             @Override
             protected Map<String, String> getParams() {
@@ -106,7 +120,7 @@ public class MessageService extends Service {
         requestQueue.add(stringRequest);
     }
     public interface MessageListener {
-        void onSuccess(String response);
+        void onSuccess(String response) throws JSONException;
         void onError(VolleyError error);
     }
     public void getMessages(MessageListener messageListener) {
@@ -114,7 +128,13 @@ public class MessageService extends Service {
         // Parse the JSON response and update the UI with the new messages
         // Handle any error that occurs while listening for new messages
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Urls.PARENT_URL + "messages/",
-                messageListener::onSuccess,
+                response -> {
+                    try {
+                        messageListener.onSuccess(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
                 messageListener::onError) {
             @Override
             public Map<String, String> getHeaders() {
