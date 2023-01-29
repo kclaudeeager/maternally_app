@@ -2,19 +2,26 @@ package com.example.navigationdrawerapp.ui.gallery;
 
 import static com.example.navigationdrawerapp.MainActivity.userDataJs;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.navigationdrawerapp.MainActivity;
+import com.example.navigationdrawerapp.R;
 import com.example.navigationdrawerapp.databinding.FragmentGalleryBinding;
 
 import org.json.JSONException;
@@ -31,21 +38,29 @@ public class ProfileFragment extends Fragment {
                 new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
-        String phoneNum = null;
+        ImageView logo = binding.profileImage;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.africanwoman);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        roundedBitmapDrawable.setCircular(true);
+        logo.setImageDrawable(roundedBitmapDrawable);
+        String phoneNum =null;
         String email = null;
         String firstName;
         String lastName;
         String role;
         String fullName = null;
+        Log.d("user here", String.valueOf(userDataJs));
         try {
-            phoneNum=userDataJs.getString("phone");
+
             email=userDataJs.getString("email");
             firstName=userDataJs.getString("firstName");
             lastName=userDataJs.getString("lastName");
             role=userDataJs.getString("role");
             fullName=firstName+"  "+lastName;
+            System.out.println("Email: "+email+", fullName: "+fullName);
+            phoneNum=userDataJs.getString("phone");
         } catch (JSONException e) {
-            e.printStackTrace();
+            phoneNum = "0788483455";
         }
         binding.email.setText(email);
         binding.fullName.setText(fullName);

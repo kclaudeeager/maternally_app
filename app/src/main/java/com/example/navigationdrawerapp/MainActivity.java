@@ -1,7 +1,5 @@
 package com.example.navigationdrawerapp;
 
-import static java.util.Base64.getUrlDecoder;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
@@ -11,24 +9,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.ui.AppBarConfiguration;
+
+import com.example.navigationdrawerapp.databinding.ActivityMainBinding;
 import com.example.navigationdrawerapp.ui.gallery.ProfileFragment;
 import com.example.navigationdrawerapp.ui.home.HomeFragment;
 import com.example.navigationdrawerapp.ui.kids.Kids_details_fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.navigationdrawerapp.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,8 +83,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Go to chat", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(chatIntent);
+
+
             }
         });
         drawer=findViewById(R.id.drawer_layout);
@@ -101,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
     txtWebsite=navHeader.findViewById(R.id.web);
     imageViewProfile=navHeader.findViewById(R.id.imageView);
     activityTitles=getResources().getStringArray(R.array.nav_item_activties_titles);
-  loadNavHeader();
-  setUpNavigationView();
+   loadNavHeader();
+   setUpNavigationView();
   if(savedInstanceState==null){
       navItemIndex=0;
       CURRENT_TAG=TAG_HOME;
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         token=userInfoINtent.getStringExtra("token");
         System.out.println("token : "+token);
        String userData=userInfoINtent.getStringExtra("User");
+        System.out.println("User data: "+userData);
        String phone=userInfoINtent.getStringExtra("phone");
         try {
              userDataJs=new JSONObject(userData);
@@ -133,13 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 return new ProfileFragment();
             case 2:
                 return new Kids_details_fragment();
-//            case 3:
-//                // notifications fragment
-//                return new NotificationsFragment();
-//
-//            case 4:
-//                // settings fragment
-//                return new SettingsFragment();
+
             default:
                 return new HomeFragment();
         }

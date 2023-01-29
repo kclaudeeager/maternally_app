@@ -33,4 +33,5 @@
     <string name="welcome">Welcome to Maternally Health</string>
     <string name="forgot">Forgot password?</string>
     <string name="login">Log In</string>
+    <string name="welcome_home">Welcome to your child\'s growth tracker!</string>
 </resources>

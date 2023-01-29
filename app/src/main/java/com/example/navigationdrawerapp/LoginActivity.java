@@ -1,30 +1,20 @@
 package com.example.navigationdrawerapp;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import static com.example.navigationdrawerapp.Urls.PARENT_URL;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -57,11 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordtxt=findViewById(R.id.password);
         loginBtn=findViewById(R.id.login);
         progressBar=findViewById(R.id.progress);
-        ImageView logo = findViewById(R.id.logo);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.africanwoman);
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        logo.setImageDrawable(roundedBitmapDrawable);
+
 
         loginBtn.setOnClickListener(view -> loginUser(usernametxt.getText().toString(),passwordtxt.getText().toString()));
 
@@ -81,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        String url = "https://maternally-health-backend.herokuapp.com/api/v1/User/login";
+        String url = PARENT_URL+"User/login";
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -94,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
                 response -> {
                     progressBar.setVisibility(View.INVISIBLE);
+                    System.out.println("Response: "+response);
                     try {
                         UserInfo = new HashMap<>();
                         Iterator<String> keys = response.keys();
@@ -101,15 +88,18 @@ public class LoginActivity extends AppCompatActivity {
                             String key = keys.next();
                             UserInfo.put(key, response.get(key));
                         }
-                        token = UserInfo.get("token").toString();
+                        token = Objects.requireNonNull(UserInfo.get("token")).toString();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("token", token);
+                        intent.putExtra("User", Objects.requireNonNull(UserInfo.get("User")).toString());
                         startActivity(intent);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }, error -> {
-                      progressBar.setVisibility(View.INVISIBLE);
+                   progressBar.setVisibility(View.INVISIBLE);
                     if (error instanceof NoConnectionError) {
                         Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG).show();
                     } else if (error instanceof TimeoutError) {
@@ -117,13 +107,14 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Server Error. Please try again.", Toast.LENGTH_LONG).show();
                     }
+                     parseVolleyError(error);
                 }
                 );
         Volley.newRequestQueue(this).add(jsonObjectRequest);
 
     }
 
-                public static List<Object> toList(JSONArray array) throws JSONException {
+    public static List<Object> toList(JSONArray array) throws JSONException {
         List<Object> list = new ArrayList<Object>();
         for (int i = 0; i < array.length(); i++) {
             Object value = array.get(i);
@@ -136,8 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return list;
     }
-
-
     public static Map<String, Object> toMap(JSONObject jsonobj)  throws JSONException {
         Map<String, Object> map = new HashMap<String, Object>();
         Iterator<String> keys = jsonobj.keys();
@@ -146,7 +135,8 @@ public class LoginActivity extends AppCompatActivity {
             Object value = jsonobj.get(key);
             if (value instanceof JSONArray) {
                 value = toList((JSONArray) value);
-            } else if (value instanceof JSONObject) {
+            }
+            else if (value instanceof JSONObject) {
                 value = toMap((JSONObject) value);
             }
             map.put(key, value);
@@ -168,4 +158,5 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }
