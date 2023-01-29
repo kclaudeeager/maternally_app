@@ -1,8 +1,8 @@
 package com.example.navigationdrawerapp;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
-public class Message {
+public class Message implements Serializable {
     private String sender;
     private String messageText;
     private long timeSent;
