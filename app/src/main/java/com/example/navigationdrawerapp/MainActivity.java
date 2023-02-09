@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_APPOINTMENT = "Appointments";
     private static final String TAG_MEDICATION = "Medication";
     private static final String TAG_CHAT = "Chat";
+
     public static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
     public static String token;
    ImageView imageViewProfile;
-    String phoneNumber;
+    public static String phoneNumber;
     private Handler mHandler;
     public static  JSONObject userDataJs;
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
   }
         Intent userInfoINtent=getIntent();
         token=userInfoINtent.getStringExtra("token");
-        System.out.println("token : "+token);
+        phoneNumber=userInfoINtent.getStringExtra("motherPhone");
+        System.out.println("Phone : "+phoneNumber);
+//        System.out.println("token : "+token);
        String userData=userInfoINtent.getStringExtra("User");
         System.out.println("User data: "+userData);
        String phone=userInfoINtent.getStringExtra("phone");
@@ -306,15 +308,13 @@ public class MainActivity extends AppCompatActivity {
         // when user is in other fragment than home
         // flag to load home fragment when user presses back key
         boolean shouldLoadHomeFragOnBackPress = true;
-        if (shouldLoadHomeFragOnBackPress) {
-            // checking if user is on other navigation menu
-            // rather than home
-            if (navItemIndex != 0) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
-                return;
-            }
+        // checking if user is on other navigation menu
+        // rather than home
+        if (navItemIndex != 0) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_HOME;
+            loadHomeFragment();
+            return;
         }
 
         super.onBackPressed();
@@ -325,5 +325,6 @@ public class MainActivity extends AppCompatActivity {
         else
             fab.hide();
     }
+
 
 }

@@ -1,7 +1,11 @@
 package com.example.navigationdrawerapp.ui.home;
 
-import android.content.Intent;
+import static com.example.navigationdrawerapp.MainActivity.phoneNumber;
+import static com.example.navigationdrawerapp.MainActivity.token;
+import static com.example.navigationdrawerapp.ui.home.HomeViewModel.retrieveMotherData;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.navigationdrawerapp.databinding.FragmentHomeBinding;
+import com.example.navigationdrawerapp.ui.kids.Callback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class HomeFragment extends Fragment {
 
@@ -25,8 +33,27 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textWelcome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView childNumberView=binding.textChildrenNumber;
 
+        retrieveMotherData(phoneNumber,requireContext(),new Callback() {
+            @Override
+            public void onSuccess(JSONObject motherData) {
+                try {
+                    int motherId = motherData.getInt("id");
+                    homeViewModel.retrieveBabiesData(motherId, token,requireContext());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("Error", errorMessage);
+            }
+        });
+
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        homeViewModel.getChildNumber().observe(getViewLifecycleOwner(),childNumberView::setText);
         return root;
     }
 

@@ -6,13 +6,22 @@ public class Message implements Serializable {
     private String sender;
     private String messageText;
     private long timeSent;
-    String senderId;
     String timestamp;
 
     public Message(String sender, String messageText, String timestamp) {
         this.sender = sender;
         this.messageText = messageText;
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "sender='" + sender + '\'' +
+                ", messageText='" + messageText + '\'' +
+                ", timeSent=" + timeSent +
+                ", timestamp='" + timestamp + '\'' +
+                '}';
     }
 
     public void setSender(String sender) {
@@ -27,13 +36,6 @@ public class Message implements Serializable {
         this.timeSent = timeSent;
     }
 
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
 
     public String getTimestamp() {
         return timestamp;

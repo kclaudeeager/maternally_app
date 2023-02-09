@@ -90,7 +90,16 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         token = Objects.requireNonNull(UserInfo.get("token")).toString();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                        JSONObject userObject= (JSONObject) UserInfo.get("User");
+                        assert userObject != null;
+                        String userRole=userObject.getString("role");
+                        if(!userRole.equalsIgnoreCase("MOTHER")){
+                            Toast.makeText(getApplicationContext(), "You can not use this app", Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         intent.putExtra("token", token);
+                        intent.putExtra("motherPhone",password);
                         intent.putExtra("User", Objects.requireNonNull(UserInfo.get("User")).toString());
                         startActivity(intent);
 

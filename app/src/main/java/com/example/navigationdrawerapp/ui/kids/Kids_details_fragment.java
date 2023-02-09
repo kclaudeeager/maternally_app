@@ -1,27 +1,40 @@
 package com.example.navigationdrawerapp.ui.kids;
 
+import static com.example.navigationdrawerapp.MainActivity.phoneNumber;
+import static com.example.navigationdrawerapp.MainActivity.token;
+import static com.example.navigationdrawerapp.Urls.PARENT_URL;
+import static com.example.navigationdrawerapp.ui.home.HomeViewModel.retrieveMotherData;
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.navigationdrawerapp.R;
-import com.example.navigationdrawerapp.databinding.FragmentGalleryBinding;
 import com.example.navigationdrawerapp.databinding.FragmentKidsDetailsFragmentBinding;
 
-import java.util.zip.Inflater;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Kids_details_fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 public class Kids_details_fragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -66,27 +79,98 @@ public class Kids_details_fragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentKidsDetailsFragmentBinding.inflate(inflater, container, false);
         View root=binding.getRoot();
         linearLayoutCompat=binding.kidLinearLayout;
-        LayoutInflater kidsDetailInflater=LayoutInflater.from(getContext());
        linearLayoutCompat.setGravity(Gravity.CENTER);
 
-       int i=0;
-       while (i<5) {
-           View kidsDetailsView= kidsDetailInflater.inflate(R.layout.kids_details, container,false);
-           TextView firstnameView=kidsDetailsView.findViewById(R.id.first_name);
-           TextView lastnameView=kidsDetailsView.findViewById(R.id.lastname);
-           TextView dateOfBirthView=kidsDetailsView.findViewById(R.id.birthDate);
-           firstnameView.setText("First name "+(i+1));
-           lastnameView.setText("Last name "+(i+1));
-           dateOfBirthView.setText("Date of birth "+(i+1));
-           linearLayoutCompat.addView(kidsDetailsView);
-           i++;
-       }
+        retrieveMotherData(phoneNumber,requireContext(),new Callback() {
+            @Override
+            public void onSuccess(JSONObject motherData) {
+                try {
+                    int motherId = motherData.getInt("id");
+                    retrieveBabiesData(motherId, token, container);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("Error", errorMessage);
+            }
+        });
+
         return root;
     }
+
+    private void retrieveBabiesData(int motherId, final String token,ViewGroup container) {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = PARENT_URL+"Baby/mother/" + motherId;
+        ProgressDialog dialog=new ProgressDialog(requireContext());
+        dialog.setTitle("Babies");
+        dialog.setMessage("Loading.....");
+        dialog.show();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        LayoutInflater kidsDetailInflater = LayoutInflater.from(getContext());
+                        linearLayoutCompat.setGravity(Gravity.CENTER);
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject baby = response.getJSONObject(i);
+                            String firstName = baby.getString("firstName");
+                            String lastName = baby.getString("lastName");
+                            String createdAt = baby.getString("createdAt");
+                            View kidsDetailsView = kidsDetailInflater.inflate(R.layout.kids_details, container, false);
+                            TextView firstNameView = kidsDetailsView.findViewById(R.id.first_name);
+                            TextView lastNameView = kidsDetailsView.findViewById(R.id.lastname);
+                            TextView birthDateView= kidsDetailsView.findViewById(R.id.birthDate);
+                            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
+                            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
+
+                            try {
+                                Date date = inputFormat.parse(createdAt);
+                                assert date != null;
+                                String outputDate = outputFormat.format(date);
+                                birthDateView.setText(outputDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            firstNameView.setText(firstName);
+                            lastNameView.setText(lastName);
+                            linearLayoutCompat.addView(kidsDetailsView);
+                        }
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                    } catch (JSONException e) {
+                        if(dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                        e.printStackTrace();
+
+                    }
+                },
+                error ->{
+                    if(dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    Log.e("VolleyError", error.toString());
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        queue.add(jsonArrayRequest);
+    }
+
 }

@@ -8,16 +8,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
 
     private static final int INCOMING_MESSAGE = 0;
     private static final int OUTGOING_MESSAGE = 1;
 
-    private List<Message> messages;
-    private String currentUserId;
-
+    private final List<Message> messages;
+    private final String currentUserId;
+     static int viewType;
     public ChatAdapter(List<Message> messages, String currentUserId) {
         this.messages = messages;
         this.currentUserId = currentUserId;
@@ -50,27 +55,52 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.getSenderId().equals(currentUserId)) {
+
+        if (message.getSender().equals(currentUserId)) {
+            this.viewType=OUTGOING_MESSAGE;
             return OUTGOING_MESSAGE;
         } else {
+            this.viewType=INCOMING_MESSAGE;
             return INCOMING_MESSAGE;
         }
     }
 
-    class ChatViewHolder extends RecyclerView.ViewHolder {
+    static class ChatViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView messageText;
-        private TextView timestamp;
+        private final TextView messageText;
+        private final TextView timestamp;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
-            messageText = itemView.findViewById(R.id.incoming_message_text);
-            timestamp = itemView.findViewById(R.id.incoming_message_timestamp);
+          if(viewType==OUTGOING_MESSAGE){
+              messageText = itemView.findViewById(R.id.outgoing_message_text);
+              timestamp = itemView.findViewById(R.id.outgoing_message_timestamp);
+
+          }
+          else{
+              messageText = itemView.findViewById(R.id.incoming_message_text);
+              timestamp = itemView.findViewById(R.id.incoming_message_timestamp);
+          }
+
         }
 
         public void bind(Message message) {
+            String dateString = message.getTimestamp();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
+
+            try {
+                Date date = inputFormat.parse(dateString);
+                Calendar calendar = Calendar.getInstance();
+                assert date != null;
+                calendar.setTime(date);
+                outputFormat.setTimeZone(calendar.getTimeZone());
+                String formattedDate = outputFormat.format(date);
+                timestamp.setText(formattedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             messageText.setText(message.getMessageText());
-            timestamp.setText(message.getTimestamp());
         }
     }
 }

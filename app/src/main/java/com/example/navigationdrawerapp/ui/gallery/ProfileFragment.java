@@ -1,5 +1,6 @@
 package com.example.navigationdrawerapp.ui.gallery;
 
+import static com.example.navigationdrawerapp.MainActivity.phoneNumber;
 import static com.example.navigationdrawerapp.MainActivity.userDataJs;
 
 import android.graphics.Bitmap;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,12 +20,10 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.navigationdrawerapp.MainActivity;
 import com.example.navigationdrawerapp.R;
 import com.example.navigationdrawerapp.databinding.FragmentGalleryBinding;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ProfileFragment extends Fragment {
 
@@ -43,7 +41,6 @@ public class ProfileFragment extends Fragment {
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         logo.setImageDrawable(roundedBitmapDrawable);
-        String phoneNum =null;
         String email = null;
         String firstName;
         String lastName;
@@ -58,13 +55,14 @@ public class ProfileFragment extends Fragment {
             role=userDataJs.getString("role");
             fullName=firstName+"  "+lastName;
             System.out.println("Email: "+email+", fullName: "+fullName);
-            phoneNum=userDataJs.getString("phone");
-        } catch (JSONException e) {
-            phoneNum = "0788483455";
+
+        } catch (JSONException ignored) {
+
         }
+
         binding.email.setText(email);
         binding.fullName.setText(fullName);
-        binding.phone.setText(phoneNum);
+        binding.phone.setText(phoneNumber);
         View root = binding.getRoot();
 
 
