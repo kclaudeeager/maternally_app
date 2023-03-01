@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MaternalHealth<DU>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.DU.api.MaternalHealth",
+            "projectName": "DU",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

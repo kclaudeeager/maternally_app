@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.bumptech.glide.Glide;
 import com.example.navigationdrawerapp.databinding.ActivityMainBinding;
 import com.example.navigationdrawerapp.ui.gallery.ProfileFragment;
 import com.example.navigationdrawerapp.ui.home.HomeFragment;
@@ -238,13 +239,11 @@ public class MainActivity extends AppCompatActivity {
 //                .into(imgNavHeaderBg);
 
         // Loading profile image
-        new DownloadImageTask(imageViewProfile,getApplicationContext()).execute(urlProfileImg);
-//        Glide.with(getParent()).load(urlProfileImg)
-//                .crossFade()
-//                .thumbnail(0.5f)
-//                .bitmapTransform(new CircleTransform(this))
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(imgProfile);
+      //  new DownloadImageTask(imageViewProfile,getApplicationContext()).execute(urlProfileImg);
+
+        Glide.with(getApplicationContext())
+                .load(urlProfileImg)
+                .into(imageViewProfile);
 
         // showing dot next to notifications label
         navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
