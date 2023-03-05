@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
 
         final TextView textView = binding.textWelcome;
         final TextView childNumberView=binding.textChildrenNumber;
+        final TextView tipsViewNumber=binding.textTipsNumber;
 
         retrieveMotherData(phoneNumber,requireContext(),new Callback() {
             @Override
@@ -41,6 +42,7 @@ public class HomeFragment extends Fragment {
                 try {
                     int motherId = motherData.getInt("id");
                     homeViewModel.retrieveBabiesData(motherId, token,requireContext());
+                    homeViewModel. getTipsLength(requireContext(),token);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -53,6 +55,7 @@ public class HomeFragment extends Fragment {
         });
 
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        homeViewModel.getTipsNumber().observe(getViewLifecycleOwner(),tipsViewNumber::setText);
         homeViewModel.getChildNumber().observe(getViewLifecycleOwner(),childNumberView::setText);
         return root;
     }

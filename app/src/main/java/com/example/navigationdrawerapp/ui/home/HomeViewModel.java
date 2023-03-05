@@ -25,9 +25,11 @@ public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
     private final MutableLiveData<String> childText;
+    private final MutableLiveData<String> tipsText;
     public HomeViewModel() {
         mText = new MutableLiveData<>();
         childText=new MutableLiveData<>();
+        tipsText=new MutableLiveData<>();
         //mText.setValue("This is home fragment");
     }
 
@@ -36,6 +38,9 @@ public class HomeViewModel extends ViewModel {
     }
     public LiveData<String> getChildNumber(){
         return childText;
+    }
+    public LiveData<String> getTipsNumber(){
+        return tipsText;
     }
 
  public void retrieveBabiesData(int motherId, final String token,Context context) {
@@ -60,6 +65,31 @@ public class HomeViewModel extends ViewModel {
 
         queue.add(jsonArrayRequest);
     }
+
+
+    public void   getTipsLength(Context context,final String token) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+         final String url = PARENT_URL + "HealthTips/all";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url, null,
+                response -> {
+                    System.out.println("Response>>"+response);
+                    tipsText.setValue(""+response.length());
+                },
+                error ->{
+                    Log.e("VolleyError here", error.toString());
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        queue.add(jsonArrayRequest);
+    }
+
     public static void retrieveMotherData(String phoneNumber, Context context, Callback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = PARENT_URL+"mothers/phone/" + phoneNumber;
