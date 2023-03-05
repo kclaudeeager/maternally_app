@@ -63,12 +63,11 @@ public class ProfileFragment extends Fragment {
         binding.email.setText(email);
         binding.fullName.setText(fullName);
         binding.phone.setText(phoneNumber);
-        View root = binding.getRoot();
 
 
 //        final TextView textView = binding.profile;
 //        profileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+        return binding.getRoot();
     }
 
     @Override

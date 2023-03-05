@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,4 +21,9 @@
         android:name="com.example.navigationdrawerapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_tips"
+        android:name="com.example.navigationdrawerapp.ui.tips.TipFragment"
+        android:label="@string/menu_tips"
+        tools:layout="@layout/fragment_tips" />
 </navigation>

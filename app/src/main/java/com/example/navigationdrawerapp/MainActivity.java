@@ -24,6 +24,7 @@ import com.example.navigationdrawerapp.databinding.ActivityMainBinding;
 import com.example.navigationdrawerapp.ui.gallery.ProfileFragment;
 import com.example.navigationdrawerapp.ui.home.HomeFragment;
 import com.example.navigationdrawerapp.ui.kids.Kids_details_fragment;
+import com.example.navigationdrawerapp.ui.tips.TipFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
     public static String token;
-   ImageView imageViewProfile;
+    ImageView imageViewProfile;
     public static String phoneNumber;
     private Handler mHandler;
     public static  JSONObject userDataJs;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         fab=findViewById(R.id.fab);
-    //fab=binding.appBarMain.fab;
+        //fab=binding.appBarMain.fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,30 +99,32 @@ public class MainActivity extends AppCompatActivity {
         toolbar=findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
         navigationView=findViewById(R.id.nav_view);
-       // navigationView= binding.navView;
-    View navHeader=navigationView.getHeaderView(0);
-    txtName=navHeader.findViewById(R.id.nav_header_title);
-    txtWebsite=navHeader.findViewById(R.id.web);
-    imageViewProfile=navHeader.findViewById(R.id.imageView);
-    activityTitles=getResources().getStringArray(R.array.nav_item_activties_titles);
-   loadNavHeader();
-   setUpNavigationView();
-  if(savedInstanceState==null){
-      navItemIndex=0;
-      CURRENT_TAG=TAG_HOME;
-      loadHomeFragment();
-  }
+        // navigationView= binding.navView;
+        View navHeader=navigationView.getHeaderView(0);
+        txtName=navHeader.findViewById(R.id.nav_header_title);
+        txtWebsite=navHeader.findViewById(R.id.web);
+        imageViewProfile=navHeader.findViewById(R.id.imageView);
+        activityTitles=getResources().getStringArray(R.array.nav_item_activties_titles);
+
+        loadNavHeader();
+        setUpNavigationView();
+
+        if(savedInstanceState==null){
+            navItemIndex=0;
+            CURRENT_TAG=TAG_HOME;
+            loadHomeFragment();
+        }
         Intent userInfoINtent=getIntent();
         token=userInfoINtent.getStringExtra("token");
         phoneNumber=userInfoINtent.getStringExtra("motherPhone");
         System.out.println("Phone : "+phoneNumber);
 //        System.out.println("token : "+token);
-       String userData=userInfoINtent.getStringExtra("User");
+        String userData=userInfoINtent.getStringExtra("User");
         System.out.println("User data: "+userData);
-       String phone=userInfoINtent.getStringExtra("phone");
+        String phone=userInfoINtent.getStringExtra("phone");
         try {
-             userDataJs=new JSONObject(userData);
-             userDataJs.put("phone",phone);
+            userDataJs=new JSONObject(userData);
+            userDataJs.put("phone",phone);
             System.out.println("Json user data:"+userDataJs);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -139,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 return new ProfileFragment();
             case 2:
                 return new Kids_details_fragment();
-
+            case 4:
+                // Health tips
+                return new TipFragment();
             default:
                 return new HomeFragment();
         }
@@ -203,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
@@ -232,14 +236,14 @@ public class MainActivity extends AppCompatActivity {
         txtWebsite.setText("");
 
         // loading header background image
-     //   new DownloadImageTask(imgNavHeaderBg,getApplicationContext()).execute(urlNavHeaderBg);
+        //   new DownloadImageTask(imgNavHeaderBg,getApplicationContext()).execute(urlNavHeaderBg);
 //        Glide.with(getParent()).load(urlNavHeaderBg)
 //                .crossFade()
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .into(imgNavHeaderBg);
 
         // Loading profile image
-      //  new DownloadImageTask(imageViewProfile,getApplicationContext()).execute(urlProfileImg);
+        //  new DownloadImageTask(imageViewProfile,getApplicationContext()).execute(urlProfileImg);
 
         Glide.with(getApplicationContext())
                 .load(urlProfileImg)
